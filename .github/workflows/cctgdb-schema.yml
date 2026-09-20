@@ -1,0 +1,30 @@
+name: CCTGDb schema
+
+on:
+  push:
+    paths:
+      - "examples/CCTGDb/**"
+      - ".github/workflows/cctgdb-schema.yml"
+  pull_request:
+    paths:
+      - "examples/CCTGDb/**"
+      - ".github/workflows/cctgdb-schema.yml"
+
+jobs:
+  validate-cctgdb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Cozo embedded client
+        run: python -m pip install --upgrade pip "pycozo[embedded]"
+
+      - name: Create schema, seed database, and validate CCTGDb
+        run: python examples/CCTGDb/validate.py
