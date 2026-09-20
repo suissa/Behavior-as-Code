@@ -1,0 +1,74 @@
+experiment:
+  id: empirical-transition-topology-v1
+  version: 1
+  seed: 42
+
+states:
+  - CUR
+  - ENG
+  - HES
+  - COM
+  - RES
+  - ACE
+  - VAL
+  - ABO
+  - NEG
+  - AAN
+  - INP
+  - DES
+
+cost:
+  range: [0.0, 1.0]
+  alpha_global: 20.0
+  alpha_context: 10.0
+  components:
+    temporal_effort: 0.15
+    interaction_steps: 0.20
+    resistance_or_reversal: 0.20
+    semantic_cognitive_effort: 0.20
+    prosodic_effort: 0.15
+    failure_or_backtrack: 0.10
+
+context_hierarchy:
+  - situation
+  - domain
+  - locale
+  - channel
+  - global
+  - theory_prior
+
+topology:
+  distance: directed_shortest_path_sum
+  allow_self_loops: true
+  node_height:
+    mode: distance_to_target
+    target: ACE
+  minimum_edge_support_for_path: 5
+  use_posterior_weight: true
+
+evaluation:
+  split_unit: conversation_id
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  subject_held_out: false
+
+  metrics:
+    - mae
+    - rmse
+    - spearman_rank
+    - calibration_by_cost_bucket
+    - path_cost_error
+    - trajectory_completion_rate
+
+reporting:
+  include:
+    - n
+    - empirical_mean
+    - posterior_mean
+    - stddev
+    - ci95
+    - shrinkage_ratio
+    - context_delta_from_global
+
+  never_publish_context_without_min_n: 30
