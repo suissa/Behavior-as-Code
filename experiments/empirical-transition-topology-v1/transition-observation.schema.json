@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://allascode.institute/behavior-as-code/transition-observation-v1.schema.json",
+  "title": "Behavior-as-Code Transition Observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "observation_id",
+    "conversation_id",
+    "observed_at",
+    "state_before",
+    "state_after",
+    "transition",
+    "context",
+    "cost_components",
+    "aggregate_observed_cost",
+    "outcome",
+    "confidence",
+    "provenance"
+  ],
+  "properties": {
+    "observation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "conversation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_ref": {
+      "type": "string"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state_before": {
+      "type": "string"
+    },
+    "state_after": {
+      "type": "string"
+    },
+    "transition": {
+      "type": "string"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "situation": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "channel": {
+          "type": "string"
+        }
+      }
+    },
+    "cost_components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "temporal_effort",
+        "interaction_steps",
+        "resistance_or_reversal",
+        "semantic_cognitive_effort",
+        "prosodic_effort",
+        "failure_or_backtrack"
+      ],
+      "properties": {
+        "temporal_effort": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "interaction_steps": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "resistance_or_reversal": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "semantic_cognitive_effort": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "prosodic_effort": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "failure_or_backtrack": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "aggregate_observed_cost": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "outcome": {
+      "enum": [
+        "completed",
+        "partial",
+        "failed",
+        "reversed",
+        "abandoned"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "counter_evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "extractor_versions",
+        "skill_versions"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "extractor_versions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "skill_versions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
