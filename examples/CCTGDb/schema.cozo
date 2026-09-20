@@ -1,0 +1,81 @@
+{:create user {
+    user_id: Uuid
+    =>
+    geo_bucket: String,
+    locale: String,
+    current_snapshot_id: Uuid?
+}}
+
+{:create behavior_state {
+    user_id: Uuid,
+    topic_id: Uuid,
+    validity: Validity
+    =>
+    state_code: String,
+    confidence: Float
+}}
+
+{:create transition {
+    user_id: Uuid,
+    topic_id: Uuid,
+    transition_id: Uuid,
+    validity: Validity
+    =>
+    from_state: String,
+    to_state: String,
+    kappa: Float,
+    theta: Float,
+    n: Int,
+    context_json: Json
+}}
+
+{:create topic {
+    topic_id: Uuid
+    =>
+    canonical_label: String,
+    semantic_vector: <F32; 384>,
+    parent_topic_id: Uuid?
+}}
+
+{:create message_semantic {
+    message_id: Uuid
+    =>
+    user_id: Uuid,
+    topic_id: Uuid,
+    semantic_vector: <F32; 384>,
+    affect_vector: <F32; 16>,
+    timestamp: Int
+}}
+
+{::hnsw create topic:semantic {
+    dim: 384,
+    m: 32,
+    dtype: F32,
+    fields: [semantic_vector],
+    distance: Cosine,
+    ef_construction: 100,
+    extend_candidates: true,
+    keep_pruned_connections: false,
+}}
+
+{::hnsw create message_semantic:semantic {
+    dim: 384,
+    m: 32,
+    dtype: F32,
+    fields: [semantic_vector],
+    distance: Cosine,
+    ef_construction: 100,
+    extend_candidates: true,
+    keep_pruned_connections: false,
+}}
+
+{::hnsw create message_semantic:affect {
+    dim: 16,
+    m: 16,
+    dtype: F32,
+    fields: [affect_vector],
+    distance: Cosine,
+    ef_construction: 40,
+    extend_candidates: true,
+    keep_pruned_connections: false,
+}}
